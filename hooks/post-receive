@@ -1,0 +1,24 @@
+#!/bin/bash
+# Define the path to the working directory
+WORKING_DIR=/home/safazupt/public_html/symphony
+
+# Define the path to the repository
+REPO_DIR=/home/safazupt/repositories/symphony
+
+# Check out the latest code
+GIT_WORK_TREE=$WORKING_DIR git --git-dir=$REPO_DIR/.git checkout -f
+
+# Move to the working directory
+cd $WORKING_DIR
+
+# Install dependencies
+bundle install --deployment --without development test
+
+# Run migrations
+RAILS_ENV=production bundle exec rails db:migrate
+
+# Precompile assets
+RAILS_ENV=production bundle exec rails assets:precompile
+
+# Restart application (adjust according to your setup)
+touch tmp/restart.txt
